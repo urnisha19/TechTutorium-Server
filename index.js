@@ -30,11 +30,12 @@ function createToken(user) {
 //--------------------------->
 
 //---------------------------> Middleware to verify JWT token
-/**This function extracts the token from the Authorization header, 
-   * verifies it using the secret key, 
-   * and attaches the user's email to the request object if the token is valid. 
-   * If the token is invalid or missing email information, it returns an "Unauthorized" message.
- */
+/** 
+ * This function extracts the token from the Authorization header, 
+ * verifies it using the secret key, 
+ * and attaches the user's email to the request object if the token is valid. 
+ * If the token is invalid or missing email information, it returns an "Unauthorized" message.
+ * */
 function verifyToken(req, res, next) {
   // (authorization: Bearer ${token} ke split korbo somoy ta array hoye jabe and token 2nd element hobe tai [1])
   const token = req.headers.authorization.split(" ")[1]; // Extract token from Authorization header
@@ -74,10 +75,10 @@ async function run() {
     //---------------------------> Routes for user operations
     // Register/login user
     /**
-    * POST /user
-      * This endpoint receives user data from the frontend and inserts it into MongoDB.
-      * This route is used in the GoogleLogin and Registration component on the frontend
-      * It listens to POST requests at http://localhost:3000/user
+     * POST /user
+     * This endpoint receives user data from the frontend and inserts it into MongoDB.
+     * This route is used in the GoogleLogin and Registration component on the frontend
+     * It listens to POST requests at http://localhost:3000/user
     */
     app.post("/user", async (req, res) => {
       const user = req.body; // Extract user data from the request body
@@ -102,11 +103,11 @@ async function run() {
     });
 
     /**
-    * GET /user/get/:id
-      * Route to retrieve user information by ID from the database.
-      * This route is used in the frontend to fetch user information for the EditProfile component.
-      * It listens to GET requests at http://localhost:3000/user/get/:id.
-    */
+     * GET /user/get/:id
+     * Route to retrieve user information by ID from the database.
+     * This route is used in the frontend to fetch user information for the EditProfile component.
+     * It listens to GET requests at http://localhost:3000/user/get/:id.
+     * */
     app.get("/user/get/:id", async (req, res) => {
       const id = req.params.id; // Retrieve the user ID from the request parameters
       const result = await userCollection.findOne({ _id: new ObjectId(id) }); // Find the user document by ID in the database
@@ -115,9 +116,9 @@ async function run() {
 
     /**
      * GET /user/:email
-      * Route to retrieve user information by email from the database.
-      * This route is used in the frontend to fetch user information for the dashboard.
-      * It listens to GET requests at http://localhost:3000/user/:email.
+     * Route to retrieve user information by email from the database.
+     * This route is used in the frontend to fetch user information for the dashboard.
+     * It listens to GET requests at http://localhost:3000/user/:email.
      * */
     app.get("/user/:email", async (req, res) => {
       const email = req.params.email; // Extract email parameter from request
@@ -128,10 +129,10 @@ async function run() {
     // Update user by email
     /**
      * PATCH /user/:email
-      * Route to update user information by email in the database.
-      * This route is used in the frontend to update user profile information.
-      * It listens to PATCH requests at http://localhost:3000/user/:email.
-     */
+     * Route to update user information by email in the database.
+     * This route is used in the frontend to update user profile information.
+     * It listens to PATCH requests at http://localhost:3000/user/:email.
+     * */
     app.patch("/user/:email", async (req, res) => {
       const email = req.params.email; // Extract email parameter from request
       const userData = req.body; // Extract updated user data from request body
@@ -146,11 +147,12 @@ async function run() {
 
 
     //---------------------------> Routes for courses operations
-    /*** POST /courses
-      * This endpoint receives data from the frontend and inserts it into MongoDB.
-      * This route is used in the AddCourse component on the frontend
-      * It listens to POST requests at http://localhost:3000/courses
-  */
+    /**
+     * POST /courses
+     * This endpoint receives data from the frontend and inserts it into MongoDB.
+     * This route is used in the AddCourse component on the frontend
+     * It listens to POST requests at http://localhost:3000/courses
+     * */
     app.post('/courses', verifyToken, async (req, res) => {
       //Add a new course
       const courseData = req.body; // Retrieve course data from the request body
@@ -159,11 +161,11 @@ async function run() {
     });
 
     /**
-        * GET /courses
-        * Route to get all courses from the database.
-        * This route is used in the AllCourses component on the frontend.
-        * It listens to GET requests at http://localhost:3000/courses
-        */
+     * GET /courses
+     * Route to get all courses from the database.
+     * This route is used in the AllCourses component on the frontend.
+     * It listens to GET requests at http://localhost:3000/courses
+     * */
     app.get('/courses', async (req, res) => {
       // Get all courses
       const courseData = courseCollection.find(); // Find all documents in the collection
@@ -176,7 +178,7 @@ async function run() {
      * Route to get a specific course by ID from the database.
      * This route is used in the CourseDetail component on the frontend.
      * It listens to GET requests at http://localhost:3000/courses/:id. (http://localhost:3000/courses/${params.id})
-    */
+     * */
     app.get('/courses/:id', async (req, res) => {
       // Get a course by ID
       const id = req.params.id;
@@ -203,11 +205,11 @@ async function run() {
     });
 
     /**
-         * DELETE /courses/:id
-         * Route to delete a specific course by ID from the database.
-         * This route is used in the DeleteCourse component on the frontend.
-         * It listens to DELETE requests at http://localhost:3000/courses/:id.
-         * */
+     * DELETE /courses/:id
+     * Route to delete a specific course by ID from the database.
+     * This route is used in the DeleteCourse component on the frontend.
+     * It listens to DELETE requests at http://localhost:3000/courses/:id.
+     * */
     app.delete('/courses/:id', verifyToken, async (req, res) => {
       const id = req.params.id; // Retrieve the ID from the request parameters
       const courseData = await courseCollection.deleteOne(
